@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use rand::Rng;
 // we can now use a `.log` method on parallel iterators
 // to generate logs directly with rayon.
 
@@ -11,11 +12,15 @@ use itertools::Itertools;
 use diam::prelude::*;
 use rayon::prelude::*;
     
+/*
+    Sequential Solutions
+*/ 
+
 pub fn sort_maximum_product(nums: Vec<i32>) -> i32 {
     let n = nums.len();
     let mut a = nums.to_owned();
     a.sort();
-    return cmp::max(a[n-1] * a[0] * a[1], a[n-1] * a[n-2] * a[n-3]);
+    (a[n-1] * a[n-2] * a[n-3]).max(a[n-1] * a[0] * a[1])
 }
 
 pub fn sp_maximum_product(nums: Vec<i32>) -> i32 {
@@ -46,47 +51,60 @@ pub fn sp_maximum_product(nums: Vec<i32>) -> i32 {
     (max_1 * max_2 * max_3).max(max_1 * min_1 * min_2)
 }
 
-// parallel
+/*
+    Parallel Solutions
+*/ 
 
-// to be implemented
-pub fn par_maximum_product(nums: Vec<i32>) -> i32 {
-    // store 3 max and 2 min
-    // for each update table
-    // return max multiplication
-    
-    // parallel comparison would be the same as sequential
-    
-    // parallel sort?
-    
-    return 0;
+pub fn par_sort_maximum_product(nums: Vec<i32>) -> i32 {
+    unimplemented!()
+    // parallel sort
 }
 
-fn main() {
-    // let start = std::time::Instant::now();
-    // let v = random_points(POINTS_NUMBER);
-    // eprintln!(
-    //     "generating {} points in sequential took {:?}",
-    //     POINTS_NUMBER,
-    //     start.elapsed()
-    // );
-    // let start = std::time::Instant::now();
-    // let par_v = par_random_points(POINTS_NUMBER);
-    // eprintln!(
-    //     "generating {} points in parallel took {:?}",
-    //     POINTS_NUMBER,
-    //     start.elapsed()
-    // );
-    // let seq_nearest_points = brute_force_nearest_points(&v);
-    // diam::svg("nearest_points.svg", || {
-    //     let par_nearest_points = par_brute_force_nearest_points(&v);
-    //     let (p1, p2) = seq_nearest_points.unwrap();
-    //     let (p3, p4) = par_nearest_points.unwrap();
-    //     assert_eq!(p1.squared_distance_to(&p2), p3.squared_distance_to(&p4))
-    // })
-    // .expect("failed generating svg file");
-    // let t1 = large_enough_triangle(&v, 10_000);
-    // let t2 = par_large_enough_triangle(&v, 10_000);
+pub fn par_sp_maximum_product(nums: Vec<i32>) -> i32 {
+    unimplemented!()
+    // divide array
+    // store local 3 max and 2 min
+    // merge
+    // return max multiplication
+}
 
-    // assert_eq!(t1, t2);
-    // assert!(perimeter(t1.unwrap()) > 10_000);
+const VSIZE: usize = 10_000;
+const INTMIN: i32 = -1000;
+const INTMAX: i32 = 1000;
+
+fn main() {
+    let mut rng = rand::thread_rng();
+    let nums: Vec<i32> = (0..VSIZE).map(|_| rng.gen_range(INTMIN..INTMAX)).collect();
+
+    let start = std::time::Instant::now();
+    let m1 = sort_maximum_product(nums.to_owned());
+    eprintln!(
+        "{:?}\tSequential with Sorting",
+        start.elapsed()
+    );
+
+    let start = std::time::Instant::now();
+    let m2 = sp_maximum_product(nums.to_owned());
+    eprintln!(
+        "{:?}\tSequential with Single Pass took",
+        start.elapsed()
+    );
+
+    // let start = std::time::Instant::now();
+    // let m3 = par_sort_maximum_product(nums.to_owned());
+    // eprintln!(
+    //     "{:?}\tParallel with Sorting",
+    //     start.elapsed()
+    // );
+
+    // let start = std::time::Instant::now();
+    // let m4 = par_sp_maximum_product(nums.to_owned());
+    // eprintln!(
+    //     "{:?}\tParallel with Single Pass",
+    //     start.elapsed()
+    // );
+
+    assert_eq!(m1, m2);
+    // assert_eq!(m2, m3);
+    // assert_eq!(m3, m4);
 }
