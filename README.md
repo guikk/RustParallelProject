@@ -78,4 +78,7 @@ This solution could outperform the sequential sort by a fair bit, but stood no c
 ### Local greatest and smallest elements
 Using the idea of divide and conquer, we can separately find the greatest and smallest elements of subarrays, then merge the resuls to find the global greatest and smallest elements.
 
-This solution stood very close to the sequential single pass, and had better results with less levels of recursion in the division phase.
+This solution showed to be considerably faster than its sequential version.
+
+![Thread usage example](graphs/maximum_product.svg)
+*Thread usage example*
