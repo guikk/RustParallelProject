@@ -63,15 +63,19 @@ The better optimized alternative is allocating memory for 5 integers (the 3 grea
 `O(1)` Space complexity
 
 ## Parallelization
-### Parallel Single Pass
+### Parallel Single Pass with Shared Limits
 By sharing the the integer variables of greatest and smallest elements, the array elements could be analysed in parallel.
 
-The problem with this solution is that if we use a lock to synchronize the access to the variables and avoid a race condition, elements would be analyzed on at a time, turning the sollution the same as the sequential single pass.
+The problem with this solution is that if we use a lock to synchronize the access to the variables and avoid a race condition, elements would be analyzed one at a time, turning the sollution the same as the sequential single pass.
 
 I couldn't find a way to avoid this from happening, so I decided to invest in other solutions.
 
 ### Parallel MergeSort
 As seen in class, there is a way of parallelizing the MergeSort algorithm. We can use it to sort the array, and possibly get a better performance.
 
+This solution could outperform the sequential sort by a fair bit, but stood no chance against the `O(n)` solution as expected.
+
 ### Local greatest and smallest elements
 Using the idea of divide and conquer, we can separately find the greatest and smallest elements of subarrays, then merge the resuls to find the global greatest and smallest elements.
+
+This solution stood very close to the sequential single pass, and had better results with less levels of recursion in the division phase.
