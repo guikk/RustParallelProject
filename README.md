@@ -55,7 +55,7 @@ The first obvious way to find the 3 greatest and 2 smallest elements of the arra
 
 Complexity based on the Rust implementation of [`sort`](https://doc.rust-lang.org/std/primitive.slice.html#method.sort) for slices
 
-### Single Pass
+### Single-pass
 
 The better optimized alternative is allocating memory for 5 integers (the 3 greatest and 2 smallest elements), and updating those values for each element of the array in a single pass.
 
@@ -63,10 +63,10 @@ The better optimized alternative is allocating memory for 5 integers (the 3 grea
 `O(1)` Space complexity
 
 ## Parallelization
-### Parallel Single Pass with Shared Limits
+### Parallel Single-pass with Shared Limits
 By sharing the the integer variables of greatest and smallest elements, the array elements could be analysed in parallel.
 
-The problem with this solution is that if we use a lock to synchronize the access to the variables and avoid a race condition, elements would be analyzed one at a time, turning the sollution the same as the sequential single pass.
+The problem with this solution is that if we use a lock to synchronize the access to the variables and avoid a race condition, elements would be analyzed one at a time, turning the sollution the same as the sequential single-pass.
 
 I couldn't find a way to avoid this from happening, so I decided to invest in other solutions.
 
@@ -78,7 +78,21 @@ This solution could outperform the sequential sort by a fair bit, but stood no c
 ### Local greatest and smallest elements
 Using the idea of divide and conquer, we can separately find the greatest and smallest elements of subarrays, then merge the resuls to find the global greatest and smallest elements.
 
-This solution showed to be considerably faster than its sequential version.
+Relying on the Master Theorem, the complexity of this solution is also `O(n)`, as both the division factor and the number of calls are equal to 2, while the time to create the subproblems and combine their results is `O(1)`
+> $C(n) = 2*C(\frac{n}{2}) + O(1)$
+>
+> **Case 2c** $\to O(n^{\log_2 2}) = O(n)$
+
+*Algorithm thread usage example*
 
 ![Thread usage example](graphs/maximum_product.svg)
-*Thread usage example*
+
+## Result Comparison
+
+*Comparison of Sorting Solutions*
+
+![](graphs/comparison_sorting.png)
+
+*Comparison of Single-pass Solutions*
+
+![](graphs/comparison_single_pass.png)
