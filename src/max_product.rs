@@ -31,8 +31,8 @@ impl Limits {
         }
     }
 
-    fn update_from_vec(&mut self, nums: Vec<i32>) {
-        for num in nums {
+    fn update_from_slice(&mut self, nums: &[i32]) {
+        for &num in nums {
             if num < self.min1 {
                 self.min2 = self.min1;
                 self.min1 = num;
@@ -59,14 +59,14 @@ impl Limits {
     fn merge(&mut self, other: Self) {
         let v: Vec<i32> = vec![other.max1, other.max2, other.max3, other.min1, other.min2];
 
-        self.update_from_vec(v);
+        self.update_from_slice(&v);
     }
 }
 
 pub fn sp_maximum_product(nums: Vec<i32>) -> i32 {
     let mut l = Limits::new();
     
-    l.update_from_vec(nums);
+    l.update_from_slice(&nums);
 
     l.max_product()
 }
@@ -83,18 +83,18 @@ pub fn par_sort_maximum_product(nums: Vec<i32>) -> i32 {
     (a[n-1] * a[n-2] * a[n-3]).max(a[n-1] * a[0] * a[1])
 }
 
-fn par_find_array_limits(nums: Vec<i32>, levels: usize) -> Limits {
+fn par_find_array_limits(nums: &[i32], levels: usize) -> Limits {
     if levels == 0 {
         let mut l = Limits::new();
-        l.update_from_vec(nums);
+        l.update_from_slice(&nums);
         return l;
     }
-    
+
     let (left, right) = nums.split_at(nums.len() / 2);
 
     let (mut l1, l2) = join(
-        || par_find_array_limits(left.to_vec(), levels - 1),
-        || par_find_array_limits(right.to_vec(), levels - 1),
+        || par_find_array_limits(left, levels - 1),
+        || par_find_array_limits(right, levels - 1),
     );
 
     l1.merge(l2);
@@ -102,8 +102,10 @@ fn par_find_array_limits(nums: Vec<i32>, levels: usize) -> Limits {
     l1
 }
 
-pub fn par_sp_maximum_product(nums: Vec<i32>) -> i32 {
+
+
+pub fn par_local_limits_maximum_product(nums: Vec<i32>) -> i32 {
     let levels = 4;
 
-    par_find_array_limits(nums, levels).max_product()
+    par_find_array_limits(&nums, levels).max_product()
 }

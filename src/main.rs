@@ -17,7 +17,16 @@ const VSIZE: usize = 10_000_000;
 const INTMIN: i32 = -1000;
 const INTMAX: i32 = 1000;
 
-fn main() {
+fn make_svg() {
+    let mut rng = rand::thread_rng();
+    let nums: Vec<i32> = (0..VSIZE).map(|_| rng.gen_range(INTMIN..INTMAX)).collect();
+
+    diam::svg("graphs/maximum_product.svg", || {
+        max_product::par_local_limits_maximum_product(nums);
+    }).unwrap();
+}
+
+fn single_comparison() {
     let mut rng = rand::thread_rng();
     let nums: Vec<i32> = (0..VSIZE).map(|_| rng.gen_range(INTMIN..INTMAX)).collect();
 
@@ -46,14 +55,19 @@ fn main() {
     );
 
     let start = std::time::Instant::now();
-    let m4 = max_product::par_sp_maximum_product(nums.to_owned());
+    let m4 = max_product::par_local_limits_maximum_product(nums.to_owned());
     eprintln!(
         "{:>25} - {:?}",
-        "Parallel Single Pass",
+        "Parallel Local Limits",
         start.elapsed(),
     );
 
     assert_eq!(m1, m2);
     assert_eq!(m2, m3);
     assert_eq!(m3, m4);
+} 
+
+fn main() {
+    single_comparison();
+    make_svg();
 }
