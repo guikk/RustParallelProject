@@ -1,5 +1,5 @@
 # Maximum Product of Three Numbers
-Shared memory programming project based on Rust for the Parallel Systems course at Grenoble INP - Ensimag.
+Rust project for the Parallel Systems course at Grenoble INP - Ensimag.
 
 It consists of taking a known programming problem, from Leetcode for example, and solving it concurrently.
 
@@ -29,10 +29,10 @@ Output: -6
 Constraints:
 
 - 3 <= nums.length <= 104
-- 1000 <= nums[i] <= 1000
+- -1000 <= nums[i] <= 1000
 
 ## Sequential Solutions
-In order to think about a parallel solution, a good way to start is by finding a sequential solution and then paralelizing it.
+In order to think about a parallel solution, a good way to start is by finding a sequential solution and then parallelizing it.
 
 ### Intuition
 This problem can be seen as an extension of the maximum product of two numbers. We can find the greatest element of the array and then multiply it by the maximum product of two numbers in the rest of the array. The exception to this simplification is when the greatest element is negative, then we will look for the pair with the smallest product.
