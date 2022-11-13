@@ -29,7 +29,7 @@ Output: -6
 Constraints:
 
 - 3 <= nums.length <= 104
-- 1000 <= nums[i] <= 1000
+- -1000 <= nums[i] <= 1000
 
 ## Sequential Solutions
 In order to think about a parallel solution, a good way to start is by finding a sequential solution and then paralelizing it.
