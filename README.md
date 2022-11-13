@@ -1,5 +1,5 @@
 # Maximum Product of Three Numbers
-Shared memory programming project based on Rust for the Parallel Systems course at Grenoble INP - Ensimag.
+Rust project for the Parallel Systems course at Grenoble INP - Ensimag.
 
 It consists of taking a known programming problem, from Leetcode for example, and solving it concurrently.
 
